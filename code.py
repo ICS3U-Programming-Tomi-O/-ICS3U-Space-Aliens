@@ -1,66 +1,95 @@
 #!/usr/bin/env python3
 
-# Created by: Tomi Oyediran
-# Created on: Jan. 10, 2023
+
+# Created by: Tomi, Oyediran
+# Created on: Dec. 12, 2022
 # This program displays a playable space alien game on a  PyBadge
+
 
 import ugame
 import stage
 
 
+import constants
+
+
 def game_scene():
-    # this function is the main game_scene
+    # main scene
 
-    #image banks for CircuitPython
+
+    #image bank for the pybadge
     image_bank_background = stage.Bank.from_bmp16("space_aliens_background.bmp")
-    image_bank_sprites = stage.Bank.from_bmp16("space_aliens.bmp")
+    image_bank_sprite = stage.Bank.from_bmp16("space_aliens.bmp")
 
-    # background being set to 0 in the image bank
-    # and size (10x8 tiles of size 16x16)
-    background = stage.Grid(image_bank_background, 10, 8)
 
-    # sprite that is updated every frame
-    ship = stage.Sprite(image_bank_sprites, 5, 75, 66)
+#set the background to image 0 in the image bank and the size (10x8 tiles of size 16)
 
-    # creating a stage for the background to show up on screen
-    # frames set to 60 fps
-    game = stage.Stage(ugame.display, 60)
-    #setting the layers of all sprites, items show up in order 
-    game.layers = [ship] + [background]
+
+    background = stage.Grid(image_bank_background, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
+
+
+    #a sprite
+    ship = stage.Sprite(image_bank_sprite, 5, 75, 66)
+
+
+    #create a stage for the background to show on
+    #and set the frame rate to 60 fps
+    game = stage.Stage(ugame.display, constants.FPS)
+    #set the layers of all the sprites, items show up in order
+    game.layers = [ship]+[background]
     #render all sprites
-    # rendering only the background
     game.render_block()
 
-    #repeat forever in game loop
+
+    #repeat forever game loop
     while True:
-        #user input
+        #get user input
         keys = ugame.buttons.get_pressed()
 
+
         if keys & ugame.K_X:
-             print("A")
+            pass
         if keys & ugame.K_O:
-             print("B")
+            pass
         if keys & ugame.K_START:
-             print("Start") 
+            pass
         if keys & ugame.K_SELECT:
-             print("Select")
+            pass
+        #input to make the sprite move
+        # if right button is pressed the sprites moves to the right + 1
         if keys & ugame.K_RIGHT:
-            ship.move(ship.x + 1, ship.y)
+            if ship.x <= constants.SCREEN_X - constants.SPRITE_SIZE:
+                ship.move(ship.x + 1, ship.y)
+        # catch to make sure that the sprite cannot go past its boundaries
+            else:
+                ship.move(constants.SCREEN_X - constants.SPRITE_SIZE, ship.y)
+        # if right button is pressed the sprites moves to the left - 1
         if keys & ugame.K_LEFT:
-            ship.move(ship.x - 1, ship.y)
+            if ship.x >= 0:
+                ship.move(ship.x - 1, ship.y)
+        # catch to make sure that the sprite cannot go past its boundaries
+            else:
+                ship.move(0, ship.y)
         if keys & ugame.K_UP:
-             ship.move(ship.x, ship.y - 1)
+            pass
         if keys & ugame.K_DOWN:
-             ship.move(ship.x, ship.y + 1)
-        
+            pass
 
 
 
-        # update game logic
-         
-        # redraw sprite
+
+        #update game logic
+
+
+        # refreshes the sprite forever ( forever loop)
+
+
         game.render_sprites([ship])
-        game.tick()
+        # refreshes the sprite every 1 60th of a second to maintain the 60 fps refresh rate
 
-if __name__ == "__main__" :
-      game_scene()
+
+        game.tick()        
+
+
+if __name__ == "__main__":
+    game_scene()
