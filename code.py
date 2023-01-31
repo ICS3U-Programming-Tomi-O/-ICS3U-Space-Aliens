@@ -2,7 +2,7 @@
 
 
 # Created by: Tomi, Oyediran
-# Created on: Dec. 12, 2022
+# Created on: Jan. 31, 2023
 # This program displays a playable space alien game on a  PyBadge
 
 
@@ -28,7 +28,7 @@ def game_scene():
     background = stage.Grid(image_bank_background, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
 
 
-    #a sprite
+    #sprite
     ship = stage.Sprite(image_bank_sprite, 5, 75, 66)
 
 
